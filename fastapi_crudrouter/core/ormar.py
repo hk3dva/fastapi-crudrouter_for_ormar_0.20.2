@@ -95,7 +95,7 @@ class OrmarCRUDRouter(CRUDGenerator[Model]):
     def _create(self, *args: Any, **kwargs: Any) -> CALLABLE:
         async def route(model: self.create_schema) -> Model:  # type: ignore
             model_dict = model.dict()
-            if self.schema.Meta.model_fields[self._pk].autoincrement:
+            if self._pk == "id":
                 model_dict.pop(self._pk, None)
             try:
                 return await self.schema.objects.create(**model_dict)

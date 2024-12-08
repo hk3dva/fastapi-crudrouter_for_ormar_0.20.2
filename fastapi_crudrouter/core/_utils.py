@@ -14,7 +14,7 @@ class AttrDict(dict):  # type: ignore
 
 def get_pk_type(schema: Type[PYDANTIC_SCHEMA], pk_field: str) -> Any:
     try:
-        return schema.__fields__[pk_field].type_
+        return schema.__fields__[pk_field].__type__
     except KeyError:
         return int
 
