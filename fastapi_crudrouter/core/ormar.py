@@ -111,9 +111,12 @@ class OrmarCRUDRouter(CRUDGenerator[Model]):
         ) -> Model:
             filter_ = {self._pk: item_id}
             try:
-                await self.schema.objects.filter(_exclude=False, **filter_).update(
-                    **model.dict(exclude_unset=True)
-                )
+                unit = await self.schema.objects.get(id=item_id)
+                await unit.update(**model.dict(exclude_unset=True))
+
+                # await self.schema.objects.filter(_exclude=False, **filter_).update(
+                #     **model.dict(exclude_unset=True)
+                # )
             except self._INTEGRITY_ERROR as e:
                 self._raise(e)
             return await self._get_one()(item_id)
