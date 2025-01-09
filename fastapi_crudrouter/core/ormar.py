@@ -72,7 +72,7 @@ class OrmarCRUDRouter(CRUDGenerator[Model]):
             pagination: PAGINATION = self.pagination,
         ) -> List[Optional[Model]]:
             skip, limit = pagination.get("skip"), pagination.get("limit")
-            query = self.schema.objects.select_all(follow=True).offset(cast(int, skip))
+            query = self.schema.objects.offset(cast(int, skip))
             if limit:
                 query = query.limit(limit)
             return await query.all()  # type: ignore
@@ -83,7 +83,7 @@ class OrmarCRUDRouter(CRUDGenerator[Model]):
         async def route(item_id: self._pk_type) -> Model:  # type: ignore
             try:
                 filter_ = {self._pk: item_id}
-                model = await self.schema.objects.select_all(follow=True).filter(
+                model = await self.schema.objects.filter(
                     _exclude=False, **filter_
                 ).first()
             except NoMatch:
